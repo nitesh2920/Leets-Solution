@@ -1,9 +1,9 @@
-name: Remove - LeetSync from Commit Message
+name: Remove '- LeetSync' from Commit Message
 
 on:
   push:
     branches:
-      - main
+      - main  # Adjust to your branch name if different
 
 jobs:
   remove-leetsync:
@@ -11,14 +11,30 @@ jobs:
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: 0  # Fetch full history to make amends
 
-    - name: Remove - LeetSync from commit message
+    - name: Remove '- LeetSync' from commit message
       run: |
-        git filter-branch -f --msg-filter '
-          sed "s/- LeetSync//g"
-        ' HEAD
+        # Get the latest commit message
+        commit_message=$(git log -1 --pretty=%B)
+        
+        # Check if the commit message contains '- LeetSync'
+        if echo "$commit_message" | grep -q " - LeetSync"; then
+          # Remove '- LeetSync' from the commit message
+          new_commit_message=$(echo "$commit_message" | sed 's/ - LeetSync//g')
 
-    - name: Force push changes
-      run: |
-        git push origin main --force
+          # Amend the commit message
+          git commit --amend -m "$new_commit_message"
+
+          # Force push the amended commit
+          git push origin main --force
+        else
+          echo "No '- LeetSync' in commit message, no changes made."
+        fi
+      env:
+        GIT_AUTHOR_NAME: Nitesh
+        GIT_AUTHOR_EMAIL: niteshtiwari0234@gmail.com
+        GIT_COMMITTER_NAME: Nitesh
+        GIT_COMMITTER_EMAIL: niteshtiwari0234@gmail.com
