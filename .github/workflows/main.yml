@@ -1,3 +1,7 @@
+
+
+
+
 name: Clean Commit Message
 
 on:
@@ -15,29 +19,15 @@ jobs:
       with:
         fetch-depth: 0  # Fetch full history to make amends
 
-    - name: Get latest commit message
-      id: get_commit
+    - name: Amend commit message to remove '- LeetSync'
       run: |
-        # Get the latest commit hash and message
-        $commitHash = git log -1 --format=%H
+        # Get the latest commit message
         $commitMessage = git log -1 --pretty=%B
-        echo "Commit hash: $commitHash"
-        echo "Commit message: $commitMessage"
-        echo "COMMIT_MESSAGE=$commitMessage" >> $env:GITHUB_ENV
-
-    - name: Amend commit message to remove '- LeetSync' variants
-      run: |
-        # Retrieve the commit message from the environment variable
-        $commitMessage = $env:COMMIT_MESSAGE
         
-        # Pattern to match '-LeetSync', '- LeetSync', or '-LeetSync' (with optional space after '-')
-        $pattern = "\s?-?LeetSync\b"
-        
-        # Check if the commit message contains any of these variants
-        if ($commitMessage -match $pattern) {
-          # Remove the variants from the commit message
-          $newCommitMessage = $commitMessage -replace $pattern, ""
-          Write-Output "Updated commit message: $newCommitMessage"
+        # Check if the commit message contains '- LeetSync'
+        if ($commitMessage -match " - LeetSync") {
+          # Remove '- LeetSync' from the commit message
+          $newCommitMessage = $commitMessage -replace " - LeetSync", ""
 
           # Amend the commit message
           git commit --amend -m $newCommitMessage
@@ -45,7 +35,7 @@ jobs:
           # Force push the amended commit
           git push origin main --force
         } else {
-          Write-Output "No '-LeetSync' variants in commit message, no changes made."
+          Write-Output "No ' - LeetSync' in commit message, no changes made."
         }
       env:
         GIT_AUTHOR_NAME: GitHub Actions
