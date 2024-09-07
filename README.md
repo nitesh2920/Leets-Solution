@@ -10,7 +10,7 @@ Welcome to the **LeetCode Solutions** repository! Here, you'll find solutions to
 
 ## Like the Repo?
 
-If you find this repository useful, please give it a ⭐️!
+If you find this repository useful, please give it a ⭐️⭐️.
 
 ---
 
