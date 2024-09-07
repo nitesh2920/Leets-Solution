@@ -21,6 +21,7 @@ public:
             //     end--;
             // }
             reverse(matrix[i].begin(),matrix[i].end());
+            //understand
         }
        
     }
