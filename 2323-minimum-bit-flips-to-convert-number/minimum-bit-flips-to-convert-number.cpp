@@ -1,8 +1,6 @@
 class Solution {
 public:
     int minBitFlips(int start, int goal) {
-        // int xor;
-        
         int xorR=start^goal;
         int ans=0;
         while(xorR)
